@@ -246,11 +246,11 @@ colnames(mydata)<-c('年级','性别','健康状态','独生子女','母亲教�
                     '兴趣爱好','师生关系','同伴关系','亲子关系-母亲','亲子关系-父亲',
                     '学业管教','矛盾解决方式','家庭经济','学习压力','心理健康')
 #mydata$'心理健康'<-factor(mydata$'心理健康')#数据处理
-sub<-sample(1:15160,13160)#10000个样例作为训练集，其余作为测试集
-sub2<-sample(1:15160,3000)
+sub<-sample(1:15160,12160)#12160个样例作为训练集，其余作为测试集
+
 train<-mydata[sub,]
 test<-mydata[-sub,]
-test2<-mydata[sub2,]
+
 m<-vglm(心理健康~.,
             family=cumulative(parallel=TRUE),data=train)
 summary(m)
@@ -265,11 +265,11 @@ fit01a<-polr(factor(V19)~1,data=data0)
 fit01b<-polr(factor(V19)~ V1+V2+V3+V4+V5+V6+V9+V10+V11+V12+V13+V14+V15+V17+V18,data=data0)
 anova(fit01a,fit01b)
 #对测试集进行预测
-pre_ran <- predict(model,newdata=test2)
+pre_ran <- predict(model,newdata=test)
 #将真实值和预测值整合到一起
-obs_p_ran = data.frame(prob=pre_ran,obs=test2$心理健康)
+obs_p_ran = data.frame(prob=pre_ran,obs=test$心理健康)
 #输出混淆矩阵
-table(test2$心理健康,pre_ran,dnn=c("真实值","预测值"))
+table(test$心理健康,pre_ran,dnn=c("真实值","预测值"))
 
 
 
